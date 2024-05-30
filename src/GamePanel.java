@@ -115,23 +115,26 @@ public class GamePanel extends JPanel implements ActionListener {
                 running = false;
             }
         }
-        //Checks if head touches border
-//        if (x[0] > SCREEN_WIDTH || x[0] < 0 || y[0] > SCREEN_HEIGHT || y[0] < 0){
-//            running = false;
-//        }
+
+        //Shift to left side if snake touches right border
         if (x[0] >= SCREEN_WIDTH){
             x[0] = 0;
         }
+
+        //Shift to right side if snake touches left border
         if (x[0] < 0){
             x[0] = SCREEN_WIDTH;
         }
+
+        //Shift to top if snake touches bottom border
         if (y[0] >= SCREEN_HEIGHT){
             y[0] = 0;
         }
+
+        //Shift to bottom if snake touches top border
         if (y[0] < 0){
             y[0] = SCREEN_HEIGHT;
         }
-
 
         if (!running){
             timer.stop();

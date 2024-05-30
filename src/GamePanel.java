@@ -108,17 +108,30 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void checkColisions(){
-        //Checks if head colides with snake body
+    public void checkCollisions(){
+        //Checks if head collides with snake body
         for(int i = 1; i < bodyParts; i++){
             if ((x[i] == x[0]) && (y[i] == y[0])){
                 running = false;
             }
         }
         //Checks if head touches border
-        if (x[0] > SCREEN_WIDTH || x[0] < 0 || y[0] > SCREEN_HEIGHT || y[0] < 0){
-            running = false;
+//        if (x[0] > SCREEN_WIDTH || x[0] < 0 || y[0] > SCREEN_HEIGHT || y[0] < 0){
+//            running = false;
+//        }
+        if (x[0] >= SCREEN_WIDTH){
+            x[0] = 0;
         }
+        if (x[0] < 0){
+            x[0] = SCREEN_WIDTH;
+        }
+        if (y[0] >= SCREEN_HEIGHT){
+            y[0] = 0;
+        }
+        if (y[0] < 0){
+            y[0] = SCREEN_HEIGHT;
+        }
+
 
         if (!running){
             timer.stop();
@@ -137,6 +150,21 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Ink Free", Font.BOLD, 75));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
         g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over"))/2,SCREEN_HEIGHT/2);
+
+    }
+
+    public void replay(){
+        running = true;
+        bodyParts = 6;
+        for (int i = 0; i < bodyParts; i++){
+            x[i] = 0;
+            y[i] = 0;
+        }
+        applesEaten = 0;
+        direction = 'R';
+        timer = new Timer(DELAY,this);
+        timer.start();
+        repaint();
     }
 
     public class MyKeyAdapter extends KeyAdapter{
@@ -163,6 +191,11 @@ public class GamePanel extends JPanel implements ActionListener {
                         direction = 'D';
                         break;
                     }
+                case KeyEvent.VK_ENTER:
+                    if (!running){
+                        replay();
+                        break;
+                    }
             }
         }
     }
@@ -172,7 +205,7 @@ public class GamePanel extends JPanel implements ActionListener {
         if(running){
             move();
             checkApple();
-            checkColisions();
+            checkCollisions();
         }
         repaint();
     }
